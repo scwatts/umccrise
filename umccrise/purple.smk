@@ -190,6 +190,12 @@ rule purple_run:
             f'-ref_genome {input.ref_fa} '
             f'-circos circos 2>&1 | tee {log} '
         )
+        # The rainfall_png output is only created when there are <=100000 variants in input.
+        # Create dummy output rainfall_png output file if it doesn't exist
+        import pathlib
+        rainfall_fp = pathlib.Path(output.rainfall_png)
+        if not rainfall_fp.exists():
+          rainfall_fp.touch()
 
 # generate custom circos from PURPLE templates (BAF points on outside, CNVs/SVs inside)
 rule purple_circos_baf:
